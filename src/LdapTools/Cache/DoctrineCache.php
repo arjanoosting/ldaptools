@@ -11,7 +11,8 @@
 namespace LdapTools\Cache;
 
 use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\FilesystemCache;
+use Doctrine\Common\Cache\Psr6\DoctrineProvider;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 
 /**
  * A wrapper around the Doctrine Cache.
@@ -141,7 +142,7 @@ class DoctrineCache implements CacheInterface
     protected function getCache()
     {
         if (!$this->cache) {
-            $this->cache = new FilesystemCache($this->cacheFolder);
+            $this->cache = DoctrineProvider::wrap(new FilesystemAdapter('', 0, $this->cacheFolder));
         }
 
         return $this->cache;
